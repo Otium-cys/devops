@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: deployment-test
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: app-test # 밑 레이블이랑 같아야함/서비스의 키 밸류랑 똑같아야함
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: app-test #밑 레이블이랑 같아야함 서비스의 키 밸류랑 똑같아야함
+    spec:
+      containers:
+      - image: 250514148096.dkr.ecr.ap-northeast-2.amazonaws.com/test:1.0 ## ECR 이미지
+        imagePullPolicy: Always
+        name: app-test
+        ports:
+        - containerPort: 8080

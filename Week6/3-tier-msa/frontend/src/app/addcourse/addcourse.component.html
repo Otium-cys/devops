@@ -1,0 +1,83 @@
+<div class="container">
+  <div class="container-fluid bg-light p-5">
+    <h1>Angular Application</h1>
+  </div>
+
+  <div class="row">
+    <div class="col-4">
+      <h3 class="text-center">Add Course</h3>
+
+      <div class="form-floating">
+        <input
+          type="number"
+          class="form-control"
+          [(ngModel)]="course.courseId"
+          placeholder="Enter Course Id"
+          required
+          id="courseId"
+        />
+        <label for="courseId">Enter Course Id</label>
+      </div>
+
+      <div class="form-floating">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="course.courseName"
+          placeholder="Enter Course Name"
+          required
+          id="courseName"
+        />
+        <label for="courseName">Enter Course Name</label>
+      </div>
+
+      <div class="form-floating">
+        <input
+          type="text"
+          class="form-control"
+          [(ngModel)]="course.fees"
+          placeholder="Enter Course Fees"
+          required
+          id="courseFees"
+        />
+        <label for="courseFees">Enter Course Fees</label>
+      </div>
+      <button class="btn btn-primary my-1" (click)="registerCourse()">
+        Register
+      </button>
+    </div>
+
+    <div class="col-8">
+      <table class="table caption-top my-4">
+        <caption>
+          List of Courses
+        </caption>
+        <thead>
+          <tr>
+            <th>Course Id</th>
+            <th>Course Name</th>
+            <th>Course Fees</th>
+            <th>&nbsp;</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let course of courses">
+            <td>{{ course.courseId }}</td>
+            <td>{{ course.courseName }}</td>
+            <td>{{ course.fees }}</td>
+            <td class="text-center">
+              <button
+                class="btn btn-danger"
+                (click)="deleteCourse(course.courseId)"
+              >
+                Delete
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="courses.length === 0">There are no courses!</p>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: service-test
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+      protocol: TCP
+  type: LoadBalancer # ClusterIP에서 LoadBalancer로 변경
+  selector:
+    app.kubernetes.io/name: app-test ##디플로이의 키 밸류랑같아야함
+
+  
+  # ClusterIP 클러스터 내부의 통신 NodePort/LoadBalancer 쿠버네티스 외부와 연결 

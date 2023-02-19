@@ -1,0 +1,61 @@
+name: Week6 3-Tier MSA Frontend CI/CD Pipeline
+
+on:
+  push:
+    branches: [ dev ]
+
+env:
+  image-tag: ${{ github.sha }}
+
+jobs:
+  build:
+    name: Build Image
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out code
+      uses: actions/checkout@v2
+
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ap-northeast-2
+
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
+
+    - name: Frontend Build, tag, and push image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY: frontend
+        IMAGE_TAG: ${{ env.image-tag }}
+      run: |
+        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./Week6/3-tier-msa/frontend
+        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+  update-argocd-frontend-metadata:
+    needs: build
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./Week6/kubernetes/helm-charts/frontend
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: change values.yaml
+        run: |
+          sed -i 's/tag:.*/tag: ${{ env.image-tag }}/g' values.yaml
+
+      - name: git push
+        run: |
+          git config --global user.email "<Your Email Address>"
+          git config --global user.name "<Your Name>"
+          git pull origin main
+          git add values.yaml
+          git commit -m "[feat] trigger to deploy frontend container to kubernetes"
+          git push origin main
