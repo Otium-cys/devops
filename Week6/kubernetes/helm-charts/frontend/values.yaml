@@ -8,7 +8,7 @@ container:
   port: 80
 
 image:
-  repository: <AWS ECR URL>/frontend
+  repository: 250514148096.dkr.ecr.ap-northeast-2.amazonaws.com/frontend
   pullPolicy: IfNotPresent
   tag: latest
 
@@ -32,7 +32,7 @@ ingress:
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
-    alb.ingress.kubernetes.io/subnets: <AWS Subnet IDs>
+    alb.ingress.kubernetes.io/subnets: subnet-091b0f283627e6098, subnet-0d616d00a92fdbde8
   hosts:
     - host: ""
       paths:
