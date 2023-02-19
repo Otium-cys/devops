@@ -18,7 +18,7 @@ public class BackendApplication {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("http://<Frontend Ingress Adress>").allowedMethods("*").allowedHeaders("*");
+                registry.addMapping("/**").allowedOrigins("k8s-3tiermsa-backend-bef3a9f236-230058558.ap-northeast-2.elb.amazonaws.com").allowedMethods("*").allowedHeaders("*");
             }
         };
     }
